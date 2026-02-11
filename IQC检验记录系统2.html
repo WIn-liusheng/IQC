@@ -1,0 +1,2646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IQC检验记录系统 - 增强版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, #1a6dbb 0%, #0d4a8a 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 20px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            flex-wrap: wrap;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #fff;
+        }
+        
+        .header-text {
+            flex: 1;
+        }
+        
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .language-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .lang-btn.active {
+            background: white;
+            color: #1a6dbb;
+        }
+        
+        /* 主内容区样式 */
+        .main-content {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .sidebar {
+            flex: 1;
+            min-width: 220px;
+            max-width: 280px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .form-container {
+            flex: 3;
+            min-width: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a6dbb;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eaeff5;
+        }
+        
+        /* 导航按钮样式 */
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid #eaeff5;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 13px;
+        }
+        
+        .nav-btn:hover {
+            background: #eef5ff;
+            border-color: #1a6dbb;
+        }
+        
+        .nav-btn.active {
+            background: #eef5ff;
+            border-color: #1a6dbb;
+            color: #1a6dbb;
+        }
+        
+        .nav-btn i {
+            font-size: 16px;
+            min-width: 20px;
+        }
+        
+        /* 表单样式 */
+        .form-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeff5;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 180px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
+            font-size: 13px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d9e6;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1a6dbb;
+            box-shadow: 0 0 0 2px rgba(26, 109, 187, 0.1);
+        }
+        
+        /* 图片上传区域 */
+        .image-upload-container {
+            width: 100%;
+            margin-top: 10px;
+            padding: 20px;
+            border: 2px dashed #d1d9e6;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .image-upload-container:hover {
+            border-color: #1a6dbb;
+            background-color: #f0f7ff;
+        }
+        
+        .image-upload-area {
+            cursor: pointer;
+            padding: 20px;
+        }
+        
+        .image-upload-icon {
+            font-size: 48px;
+            color: #1a6dbb;
+            margin-bottom: 15px;
+        }
+        
+        .image-upload-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .image-upload-hint {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .image-preview-container {
+            display: none;
+            width: 100%;
+            margin-top: 15px;
+            position: relative;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 6px;
+            border: 1px solid #eaeff5;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .image-preview-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-image-action {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-remove-image {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-remove-image:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-view-full {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-view-full:hover {
+            background-color: #138496;
+        }
+        
+        /* 表格样式 */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-radius: 6px;
+            border: 1px solid #eaeff5;
+        }
+        
+        .iqc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 1300px;
+            table-layout: fixed;
+        }
+        
+        .iqc-table thead tr {
+            background-color: #1a6dbb;
+            color: white;
+            text-align: left;
+        }
+        
+        .iqc-table th,
+        .iqc-table td {
+            padding: 10px 12px;
+            border: 1px solid #eaeff5;
+            vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        
+        .iqc-table th {
+            font-weight: 600;
+        }
+        
+        .iqc-table tbody tr {
+            border-bottom: 1px solid #eaeff5;
+        }
+        
+        .iqc-table tbody tr:nth-of-type(even) {
+            background-color: #f9fbfd;
+        }
+        
+        .iqc-table tbody tr:hover {
+            background-color: #f1f7ff;
+        }
+        
+        .table-input {
+            width: 100%;
+            min-width: 80px;
+            padding: 6px 8px;
+            border: 1px solid #e0e6ef;
+            border-radius: 3px;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        
+        .table-select {
+            width: 100%;
+            min-width: 70px;
+            padding: 6px 8px;
+            border: 1px solid #e0e6ef;
+            border-radius: 3px;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        
+        .result-inputs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        
+        .result-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .table-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .btn-remove {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-add:hover {
+            background-color: #218838;
+        }
+        
+        .btn-remove:hover {
+            background-color: #c82333;
+        }
+        
+        /* 结果与处置区域 */
+        .result-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .result-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .result-option input {
+            width: auto;
+        }
+        
+        /* 按钮样式 */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eaeff5;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background-color: #1a6dbb;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #155a9e;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        .btn-print {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-print:hover {
+            background-color: #138496;
+        }
+        
+        /* 历史记录样式 */
+        .history-container {
+            display: none;
+        }
+        
+        .history-item {
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #1a6dbb;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .history-id {
+            font-weight: 600;
+            color: #1a6dbb;
+            font-size: 14px;
+        }
+        
+        .history-date {
+            color: #6c757d;
+            font-size: 13px;
+        }
+        
+        .history-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        
+        .history-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-accepted {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        /* 最近记录样式 */
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .recent-item {
+            padding: 10px;
+            background: #f8fafc;
+            border: 1px solid #eaeff5;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .recent-item:hover {
+            background: #eef5ff;
+            border-color: #1a6dbb;
+        }
+        
+        .recent-id {
+            font-weight: 500;
+            font-size: 13px;
+            color: #1a6dbb;
+        }
+        
+        .recent-details {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 13px;
+            border-top: 1px solid #eaeff5;
+        }
+        
+        /* ISO标准标识 */
+        .iso-badge {
+            display: inline-block;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 3px;
+            padding: 3px 8px;
+            font-size: 11px;
+            color: #495057;
+            margin-left: 8px;
+        }
+        
+        /* 空状态样式 */
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 36px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+        
+        /* 打印报告样式 */
+        .print-report {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            font-family: 'SimSun', '宋体', serif;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .print-report, .print-report * {
+                visibility: visible;
+            }
+            
+            .print-report {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .page-break {
+                page-break-after: always;
+            }
+        }
+        
+        .print-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+        }
+        
+        .print-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .print-subtitle {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .print-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+            table-layout: fixed;
+        }
+        
+        .print-table th, .print-table td {
+            border: 1px solid #000;
+            padding: 8px 10px;
+            vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .print-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .print-results-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+        }
+        
+        .print-result-item {
+            border: 1px solid #ddd;
+            padding: 3px;
+            text-align: center;
+            font-size: 11px;
+            min-height: 30px;
+        }
+        
+        .print-section {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+        
+        .print-section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 5px;
+        }
+        
+        .print-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .print-info-item {
+            margin-bottom: 5px;
+        }
+        
+        .print-info-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+        
+        .print-signatures {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #000;
+        }
+        
+        .print-signature {
+            text-align: center;
+        }
+        
+        .print-signature-line {
+            border-top: 1px solid #000;
+            margin-top: 40px;
+            padding-top: 5px;
+        }
+        
+        .print-image-container {
+            text-align: center;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        
+        .print-image-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .print-image {
+            max-width: 400px;
+            max-height: 300px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            margin: 0 auto;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .result-inputs {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .iqc-table {
+                min-width: 1100px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                max-width: 100%;
+                flex: 1 0 100%;
+                margin-bottom: 15px;
+            }
+            
+            .form-container {
+                flex: 1 0 100%;
+            }
+            
+            .result-inputs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .language-switcher {
+                align-self: flex-end;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .result-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-wrap: wrap;
+            }
+            
+            .btn {
+                flex: 1;
+                min-width: 120px;
+            }
+            
+            .result-inputs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 12px 0;
+            }
+            
+            .header-content {
+                padding: 0 10px;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .result-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="header-text">
+                        <h1 id="main-title">IQC检验记录系统 - 增强版</h1>
+                        <div class="subtitle" id="subtitle">符合ISO标准格式 - 支持物料标签图片上传</div>
+                    </div>
+                </div>
+                <div class="language-switcher">
+                    <button class="lang-btn active" id="lang-zh">中文</button>
+                    <button class="lang-btn" id="lang-vi">Tiếng Việt</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <div class="sidebar">
+                <h3 class="section-title" id="nav-title">导航菜单</h3>
+                <div class="nav-buttons">
+                    <button class="nav-btn active" id="nav-new">
+                        <i class="fas fa-plus-circle"></i>
+                        <span id="nav-new-text">新建检验记录</span>
+                    </button>
+                    <button class="nav-btn" id="nav-history">
+                        <i class="fas fa-history"></i>
+                        <span id="nav-history-text">历史记录查看</span>
+                    </button>
+                    <button class="nav-btn" id="nav-print">
+                        <i class="fas fa-print"></i>
+                        <span id="nav-print-text">打印报告</span>
+                    </button>
+                    <button class="nav-btn" id="nav-export">
+                        <i class="fas fa-file-export"></i>
+                        <span id="nav-export-text">导出数据</span>
+                    </button>
+                    <button class="nav-btn" id="nav-guide">
+                        <i class="fas fa-question-circle"></i>
+                        <span id="nav-guide-text">使用指南</span>
+                    </button>
+                </div>
+                
+                <h3 class="section-title" style="margin-top: 25px;" id="recent-title">最近记录</h3>
+                <div class="recent-list" id="recent-list">
+                    <!-- 最近记录会通过JavaScript动态添加 -->
+                </div>
+            </div>
+            
+            <!-- 新建检验记录表单 -->
+            <div class="form-container" id="new-record-form">
+                <h2 class="section-title" id="form-title">IQC来料检验报告 <span class="iso-badge">ISO标准格式</span></h2>
+                
+                <div class="form-section">
+                    <h3 class="section-title" id="basic-info-title">基本信息</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="report-no" id="report-no-label">报告编号</label>
+                            <input type="text" id="report-no" value="IQC-2023-10-27-001" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inspection-date" id="inspection-date-label">检验日期</label>
+                            <input type="date" id="inspection-date" value="2023-10-27">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier" id="supplier-label">供应商</label>
+                            <input type="text" id="supplier" placeholder="输入供应商名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="customer" id="customer-label">客户</label>
+                            <input type="text" id="customer" placeholder="输入客户名称">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="material-code" id="material-code-label">物料编码</label>
+                            <input type="text" id="material-code" placeholder="输入物料编码">
+                        </div>
+                        <div class="form-group">
+                            <label for="material-name" id="material-name-label">物料名称</label>
+                            <input type="text" id="material-name" placeholder="输入物料名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="model" id="model-label">机型</label>
+                            <input type="text" id="model" placeholder="输入机型">
+                        </div>
+                        <div class="form-group">
+                            <label for="inspection-no" id="inspection-no-label">送检单号</label>
+                            <input type="text" id="inspection-no" placeholder="输入送检单号">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="order-quantity" id="order-quantity-label">订单数</label>
+                            <input type="number" id="order-quantity" placeholder="输入订单数量">
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery-quantity" id="delivery-quantity-label">交货数</label>
+                            <input type="number" id="delivery-quantity" placeholder="输入交货数量">
+                        </div>
+                        <div class="form-group">
+                            <label for="received-quantity" id="received-quantity-label">实收数</label>
+                            <input type="number" id="received-quantity" placeholder="输入实收数量">
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery-date" id="delivery-date-label">交货日期</label>
+                            <input type="date" id="delivery-date">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="order-no" id="order-no-label">公司订单号</label>
+                            <input type="text" id="order-no" placeholder="输入订单号">
+                        </div>
+                        <div class="form-group">
+                            <label for="arrival-date" id="arrival-date-label">来料日期</label>
+                            <input type="date" id="arrival-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier-batch" id="supplier-batch-label">供应商批号</label>
+                            <input type="text" id="supplier-batch" placeholder="输入批号/LOT No.">
+                        </div>
+                        <div class="form-group">
+                            <label for="sample-size" id="sample-size-label">抽样数量</label>
+                            <input type="number" id="sample-size" placeholder="输入抽样数量">
+                        </div>
+                    </div>
+                    
+                    <!-- 物料标签图片上传区域 -->
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1 0 100%;">
+                            <label id="material-label-title">物料标签</label>
+                            <div class="image-upload-container">
+                                <div class="image-upload-area" id="image-upload-area">
+                                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                                    <div class="image-upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="image-upload-text" id="image-upload-text">点击上传物料标签图片</div>
+                                    <div class="image-upload-hint" id="image-upload-hint">支持 JPG, PNG, GIF 格式，最大 5MB</div>
+                                </div>
+                                <div class="image-preview-container" id="image-preview-container">
+                                    <img id="image-preview" class="image-preview" src="" alt="物料标签预览">
+                                    <div class="image-preview-actions">
+                                        <button type="button" class="btn-image-action btn-view-full" id="btn-view-full">
+                                            <i class="fas fa-expand"></i> 查看大图
+                                        </button>
+                                        <button type="button" class="btn-image-action btn-remove-image" id="btn-remove-image">
+                                            <i class="fas fa-trash"></i> 删除图片
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title" id="inspection-details-title">检验项目</h3>
+                    <div class="table-container">
+                        <table class="iqc-table">
+                            <thead>
+                                <tr>
+                                    <th id="col-no" style="width: 5%;">序号</th>
+                                    <th id="col-item" style="width: 12%;">检验项目</th>
+                                    <th id="col-standard" style="width: 20%;">检验标准/规格要求</th>
+                                    <th id="col-method" style="width: 12%;">检验方法</th>
+                                    <th id="col-sample" style="width: 8%;">抽样数</th>
+                                    <th id="col-result" style="width: 30%;">检验结果记录 (10组数据)</th>
+                                    <th id="col-judgment" style="width: 13%;">单项判定</th>
+                                    <th id="col-actions" style="width: 10%;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inspection-items">
+                                <!-- 检验项目会通过JavaScript动态添加 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-add table-btn" id="add-item"><i class="fas fa-plus"></i> <span id="add-item-text">添加检验项目</span></button>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title" id="result-title">检验结果与处置</h3>
+                    <div class="result-section">
+                        <div class="result-option">
+                            <input type="radio" id="result-accept" name="result" value="accept" checked>
+                            <label for="result-accept" id="result-accept-label">接受 (Accept)</label>
+                        </div>
+                        <div class="result-option">
+                            <input type="radio" id="result-reject" name="result" value="reject">
+                            <label for="result-reject" id="result-reject-label">拒收 (Reject)</label>
+                        </div>
+                        <div class="result-option">
+                            <input type="radio" id="result-concession" name="result" value="concession">
+                            <label for="result-concession" id="result-concession-label">特采/让步接收 (Concession)</label>
+                        </div>
+                        <div class="result-option">
+                            <input type="radio" id="result-sorting" name="result" value="sorting">
+                            <label for="result-sorting" id="result-sorting-label">挑选使用 (Sorting)</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label for="disposition" id="disposition-label">处置意见/备注</label>
+                        <textarea id="disposition" rows="3" placeholder="输入处置意见..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title" id="approval-title">批准与追溯</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inspector" id="inspector-label">检验员 (Inspector)</label>
+                            <input type="text" id="inspector" placeholder="输入检验员姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="supervisor" id="supervisor-label">IQC主管 (Supervisor)</label>
+                            <input type="text" id="supervisor" placeholder="输入主管姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="qm-approval" id="qm-approval-label">质量经理 (必要时)</label>
+                            <input type="text" id="qm-approval" placeholder="输入质量经理姓名">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="btn-reset"><span id="btn-reset-text">重置</span></button>
+                    <button class="btn btn-primary" id="btn-save"><span id="btn-save-text">保存记录</span></button>
+                    <button class="btn btn-success" id="btn-submit"><span id="btn-submit-text">提交审核</span></button>
+                    <button class="btn btn-print" id="btn-print"><i class="fas fa-print"></i> <span id="btn-print-text">打印报告</span></button>
+                </div>
+            </div>
+            
+            <!-- 历史记录查看 -->
+            <div class="form-container history-container" id="history-container">
+                <h2 class="section-title" id="history-title">IQC检验历史记录</h2>
+                <div id="history-list">
+                    <!-- 历史记录会通过JavaScript动态添加 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p id="footer-text">© 2023 IQC检验记录系统 - 符合ISO 9001标准 - 版本 3.1 (物料标签版)</p>
+        </div>
+    </footer>
+    
+    <!-- 打印报告容器 -->
+    <div id="print-container" style="display: none;"></div>
+    
+    <!-- 图片预览模态框 -->
+    <div id="image-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="position: relative; max-width: 90%; max-height: 90%;">
+            <img id="modal-image" src="" alt="物料标签" style="max-width: 100%; max-height: 80vh; display: block; margin: 0 auto;">
+            <button id="close-modal" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer;">×</button>
+        </div>
+    </div>
+    
+    <script>
+        // 双语文本资源
+        const translations = {
+            zh: {
+                // 页面标题
+                "main-title": "IQC检验记录系统 - 增强版",
+                "subtitle": "符合ISO标准格式 - 支持物料标签图片上传",
+                
+                // 导航菜单
+                "nav-title": "导航菜单",
+                "nav-new-text": "新建检验记录",
+                "nav-history-text": "历史记录查看",
+                "nav-print-text": "打印报告",
+                "nav-export-text": "导出数据",
+                "nav-guide-text": "使用指南",
+                "recent-title": "最近记录",
+                "no-recent": "暂无最近记录",
+                
+                // 表单标题
+                "form-title": "IQC来料检验报告",
+                "basic-info-title": "基本信息",
+                "inspection-details-title": "检验项目",
+                "result-title": "检验结果与处置",
+                "approval-title": "批准与追溯",
+                "material-label-title": "物料标签",
+                
+                // 表单标签
+                "report-no-label": "报告编号",
+                "inspection-date-label": "检验日期",
+                "supplier-label": "供应商",
+                "customer-label": "客户",
+                "material-code-label": "物料编码",
+                "material-name-label": "物料名称",
+                "model-label": "机型",
+                "inspection-no-label": "送检单号",
+                "order-quantity-label": "订单数",
+                "delivery-quantity-label": "交货数",
+                "received-quantity-label": "实收数",
+                "delivery-date-label": "交货日期",
+                "order-no-label": "公司订单号",
+                "arrival-date-label": "来料日期",
+                "supplier-batch-label": "供应商批号",
+                "sample-size-label": "抽样数量",
+                
+                // 图片上传相关
+                "image-upload-text": "点击上传物料标签图片",
+                "image-upload-hint": "支持 JPG, PNG, GIF 格式，最大 5MB",
+                "view-full-image": "查看大图",
+                "remove-image": "删除图片",
+                "image-label": "物料标签",
+                
+                // 表格列标题
+                "col-no": "序号",
+                "col-item": "检验项目",
+                "col-standard": "检验标准/规格要求",
+                "col-method": "检验方法",
+                "col-sample": "抽样数",
+                "col-result": "检验结果记录 (10组数据)",
+                "col-judgment": "单项判定",
+                "col-actions": "操作",
+                
+                // 按钮文本
+                "add-item-text": "添加检验项目",
+                "btn-reset-text": "重置",
+                "btn-save-text": "保存记录",
+                "btn-submit-text": "提交审核",
+                "btn-print-text": "打印报告",
+                
+                // 检验结果选项
+                "result-accept-label": "接受 (Accept)",
+                "result-reject-label": "拒收 (Reject)",
+                "result-concession-label": "特采/让步接收 (Concession)",
+                "result-sorting-label": "挑选使用 (Sorting)",
+                
+                // 其他表单元素
+                "disposition-label": "处置意见/备注",
+                "inspector-label": "检验员 (Inspector)",
+                "supervisor-label": "IQC主管 (Supervisor)",
+                "qm-approval-label": "质量经理 (必要时)",
+                
+                // 历史记录页面
+                "history-title": "IQC检验历史记录",
+                "no-history": "暂无检验记录",
+                "view-details": "查看详情",
+                "delete-record": "删除记录",
+                "print-record": "打印报告",
+                
+                // 状态标签
+                "status-accepted": "已接受",
+                "status-rejected": "已拒收",
+                "status-pending": "待审核",
+                
+                // 页脚
+                "footer-text": "© 2023 IQC检验记录系统 - 符合ISO 9001标准 - 版本 3.1 (物料标签版)",
+                
+                // 打印报告相关
+                "print-title": "IQC来料检验报告",
+                "print-iso": "ISO标准格式",
+                "print-basic-info": "基本信息",
+                "print-inspection-items": "检验项目",
+                "print-result-disposition": "检验结果与处置",
+                "print-approval-traceability": "批准与追溯",
+                "print-inspector": "检验员",
+                "print-supervisor": "IQC主管",
+                "print-qm-manager": "质量经理",
+                "print-signature": "签名",
+                "print-date": "日期",
+                "print-disposition": "处置意见/备注",
+                "print-final-judgment": "最终判定",
+                "print-accept": "接受",
+                "print-reject": "拒收",
+                "print-concession": "特采/让步接收",
+                "print-sorting": "挑选使用",
+                "print-material-label": "物料标签"
+            },
+            vi: {
+                // 页面标题
+                "main-title": "HỆ THỐNG GHI CHÉP KIỂM TRA IQC - Phiên bản nâng cao",
+                "subtitle": "Định dạng tiêu chuẩn ISO - Hỗ trợ tải lên hình ảnh nhãn vật liệu",
+                
+                // 导航菜单
+                "nav-title": "Menu điều hướng",
+                "nav-new-text": "Tạo bản ghi kiểm tra mới",
+                "nav-history-text": "Xem lịch sử bản ghi",
+                "nav-print-text": "In báo cáo",
+                "nav-export-text": "Xuất dữ liệu",
+                "nav-guide-text": "Hướng dẫn sử dụng",
+                "recent-title": "Bản ghi gần đây",
+                "no-recent": "Chưa có bản ghi gần đây",
+                
+                // 表单标题
+                "form-title": "BÁO CÁO KIỂM TRA NGUYÊN VẬT LIỆU ĐẦU VÀO",
+                "basic-info-title": "Thông tin cơ bản",
+                "inspection-details-title": "Hạng mục kiểm tra",
+                "result-title": "Kết quả kiểm tra và xử lý",
+                "approval-title": "Phê duyệt và truy xuất",
+                "material-label-title": "Nhãn vật liệu",
+                
+                // 表单标签
+                "report-no-label": "Số báo cáo",
+                "inspection-date-label": "Ngày kiểm tra",
+                "supplier-label": "Nhà cung cấp",
+                "customer-label": "Khách hàng",
+                "material-code-label": "Mã vật liệu",
+                "material-name-label": "Tên vật liệu",
+                "model-label": "Model máy",
+                "inspection-no-label": "Số phiếu gửi kiểm tra",
+                "order-quantity-label": "Số lượng đặt hàng",
+                "delivery-quantity-label": "Số lượng giao hàng",
+                "received-quantity-label": "Số lượng thực nhận",
+                "delivery-date-label": "Ngày giao hàng",
+                "order-no-label": "Số đơn đặt hàng",
+                "arrival-date-label": "Ngày nguyên liệu đến",
+                "supplier-batch-label": "Số lô nhà cung cấp",
+                "sample-size-label": "Số lượng mẫu",
+                
+                // 图片上传相关
+                "image-upload-text": "Nhấp để tải lên hình ảnh nhãn vật liệu",
+                "image-upload-hint": "Hỗ trợ định dạng JPG, PNG, GIF, tối đa 5MB",
+                "view-full-image": "Xem ảnh đầy đủ",
+                "remove-image": "Xóa ảnh",
+                "image-label": "Nhãn vật liệu",
+                
+                // 表格列标题
+                "col-no": "STT",
+                "col-item": "Hạng mục kiểm tra",
+                "col-standard": "Tiêu chuẩn/Yêu cầu kỹ thuật",
+                "col-method": "Phương pháp kiểm tra",
+                "col-sample": "Số lượng mẫu",
+                "col-result": "Ghi chép kết quả kiểm tra (10 nhóm dữ liệu)",
+                "col-judgment": "Đánh giá từng mục",
+                "col-actions": "Thao tác",
+                
+                // 按钮文本
+                "add-item-text": "Thêm hạng mục kiểm tra",
+                "btn-reset-text": "Đặt lại",
+                "btn-save-text": "Lưu bản ghi",
+                "btn-submit-text": "Gửi phê duyệt",
+                "btn-print-text": "In báo cáo",
+                
+                // 检验结果选项
+                "result-accept-label": "Chấp nhận (Accept)",
+                "result-reject-label": "Từ chối (Reject)",
+                "result-concession-label": "Nhượng bộ (Concession)",
+                "result-sorting-label": "Phân loại sử dụng (Sorting)",
+                
+                // 其他表单元素
+                "disposition-label": "Ý kiến xử lý/Ghi chú",
+                "inspector-label": "Nhân viên kiểm tra (Inspector)",
+                "supervisor-label": "Giám sát IQC (Supervisor)",
+                "qm-approval-label": "Quản lý chất lượng (khi cần)",
+                
+                // 历史记录页面
+                "history-title": "Lịch sử kiểm tra IQC",
+                "no-history": "Chưa có bản ghi kiểm tra",
+                "view-details": "Xem chi tiết",
+                "delete-record": "Xóa bản ghi",
+                "print-record": "In báo cáo",
+                
+                // 状态标签
+                "status-accepted": "Đã chấp nhận",
+                "status-rejected": "Đã từ chối",
+                "status-pending": "Chờ phê duyệt",
+                
+                // 页脚
+                "footer-text": "© 2023 Hệ thống ghi chép kiểm tra IQC - Tuân thủ tiêu chuẩn ISO 9001 - Phiên bản 3.1 (Phiên bản nhãn vật liệu)",
+                
+                // 打印报告相关
+                "print-title": "BÁO CÁO KIỂM TRA NGUYÊN VẬT LIỆU ĐẦU VÀO",
+                "print-iso": "Định dạng tiêu chuẩn ISO",
+                "print-basic-info": "Thông tin cơ bản",
+                "print-inspection-items": "Hạng mục kiểm tra",
+                "print-result-disposition": "Kết quả kiểm tra và xử lý",
+                "print-approval-traceability": "Phê duyệt và truy xuất",
+                "print-inspector": "Nhân viên kiểm tra",
+                "print-supervisor": "Giám sát IQC",
+                "print-qm-manager": "Quản lý chất lượng",
+                "print-signature": "Chữ ký",
+                "print-date": "Ngày",
+                "print-disposition": "Ý kiến xử lý/Ghi chú",
+                "print-final-judgment": "Kết luận cuối cùng",
+                "print-accept": "Chấp nhận",
+                "print-reject": "Từ chối",
+                "print-concession": "Nhượng bộ",
+                "print-sorting": "Phân loại sử dụng",
+                "print-material-label": "Nhãn vật liệu"
+            }
+        };
+
+        // 当前语言
+        let currentLang = 'zh';
+        
+        // 检验记录数据存储
+        let inspectionRecords = JSON.parse(localStorage.getItem('iqcRecords')) || [];
+        
+        // 当前上传的图片数据
+        let currentImageData = null;
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化语言
+            setLanguage('zh');
+            
+            // 初始化检验项目表格
+            initInspectionItems();
+            
+            // 加载最近记录
+            loadRecentRecords();
+            
+            // 加载历史记录
+            loadHistoryRecords();
+            
+            // 设置事件监听器
+            setupEventListeners();
+            
+            // 生成报告编号
+            generateReportNo();
+            
+            // 设置默认日期
+            setDefaultDates();
+        });
+        
+        // 设置默认日期
+        function setDefaultDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('inspection-date').value = today;
+            document.getElementById('arrival-date').value = today;
+            document.getElementById('delivery-date').value = today;
+        }
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 语言切换
+            document.getElementById('lang-zh').addEventListener('click', () => setLanguage('zh'));
+            document.getElementById('lang-vi').addEventListener('click', () => setLanguage('vi'));
+            
+            // 导航菜单
+            document.getElementById('nav-new').addEventListener('click', () => showSection('new-record-form'));
+            document.getElementById('nav-history').addEventListener('click', () => showSection('history-container'));
+            document.getElementById('nav-print').addEventListener('click', printCurrentRecord);
+            document.getElementById('nav-export').addEventListener('click', exportData);
+            document.getElementById('nav-guide').addEventListener('click', showGuide);
+            
+            // 检验项目表格操作
+            document.getElementById('add-item').addEventListener('click', addInspectionItem);
+            
+            // 表单按钮
+            document.getElementById('btn-reset').addEventListener('click', resetForm);
+            document.getElementById('btn-save').addEventListener('click', saveRecord);
+            document.getElementById('btn-submit').addEventListener('click', submitRecord);
+            document.getElementById('btn-print').addEventListener('click', printCurrentRecord);
+            
+            // 自动计算实收数
+            document.getElementById('delivery-quantity').addEventListener('change', updateReceivedQuantity);
+            
+            // 图片上传相关
+            document.getElementById('image-upload-area').addEventListener('click', () => document.getElementById('image-upload').click());
+            document.getElementById('image-upload').addEventListener('change', handleImageUpload);
+            document.getElementById('btn-remove-image').addEventListener('click', removeImage);
+            document.getElementById('btn-view-full').addEventListener('click', viewFullImage);
+            document.getElementById('close-modal').addEventListener('click', closeImageModal);
+        }
+        
+        // 自动更新实收数
+        function updateReceivedQuantity() {
+            const deliveryQuantity = document.getElementById('delivery-quantity').value;
+            if (deliveryQuantity && !document.getElementById('received-quantity').value) {
+                document.getElementById('received-quantity').value = deliveryQuantity;
+            }
+        }
+        
+        // 设置语言
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // 更新语言按钮状态
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+            document.getElementById('lang-vi').classList.toggle('active', lang === 'vi');
+            
+            // 更新所有文本元素
+            Object.keys(translations[lang]).forEach(key => {
+                const elements = document.querySelectorAll(`[id="${key}"]`);
+                elements.forEach(element => {
+                    if (element.tagName === 'INPUT' && element.type !== 'button' && element.type !== 'submit') {
+                        // 对于输入框，只更新placeholder
+                        if (element.placeholder && translations[lang][key].includes('输入') || translations[lang][key].includes('Chọn') || translations[lang][key].includes('Nhập')) {
+                            element.placeholder = translations[lang][key];
+                        }
+                    } else if (element.tagName === 'OPTION') {
+                        // 跳过选项
+                        return;
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+            });
+            
+            // 更新表格中的按钮文本
+            document.querySelectorAll('.item-remove').forEach(btn => {
+                btn.innerHTML = `<i class="fas fa-trash"></i> ${lang === 'zh' ? '删除' : 'Xóa'}`;
+            });
+            
+            // 更新历史记录中的按钮文本
+            updateHistoryButtonsText();
+            
+            // 重新加载最近记录和历史记录以更新语言
+            loadRecentRecords();
+            loadHistoryRecords();
+        }
+        
+        // 更新历史记录按钮文本
+        function updateHistoryButtonsText() {
+            document.querySelectorAll('.btn-view').forEach(btn => {
+                btn.innerHTML = `<i class="fas fa-eye"></i> ${currentLang === 'zh' ? '查看详情' : 'Xem chi tiết'}`;
+            });
+            
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.innerHTML = `<i class="fas fa-trash"></i> ${currentLang === 'zh' ? '删除记录' : 'Xóa bản ghi'}`;
+            });
+            
+            document.querySelectorAll('.btn-print-history').forEach(btn => {
+                btn.innerHTML = `<i class="fas fa-print"></i> ${currentLang === 'zh' ? '打印报告' : 'In báo cáo'}`;
+            });
+        }
+        
+        // 显示/隐藏不同部分
+        function showSection(sectionId) {
+            // 更新导航按钮状态
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            if (sectionId === 'new-record-form') {
+                document.getElementById('nav-new').classList.add('active');
+            } else if (sectionId === 'history-container') {
+                document.getElementById('nav-history').classList.add('active');
+                loadHistoryRecords(); // 刷新历史记录
+            }
+            
+            // 显示/隐藏内容区域
+            document.getElementById('new-record-form').style.display = sectionId === 'new-record-form' ? 'block' : 'none';
+            document.getElementById('history-container').style.display = sectionId === 'history-container' ? 'block' : 'none';
+        }
+        
+        // 初始化检验项目表格
+        function initInspectionItems() {
+            const itemsContainer = document.getElementById('inspection-items');
+            itemsContainer.innerHTML = '';
+            
+            // 添加默认检验项目
+            const defaultItems = [
+                { 
+                    item: "外观检查", 
+                    standard: "表面光滑，无裂纹、毛刺、锈蚀、变形", 
+                    method: "目视，通用检具", 
+                    sample: "5", 
+                    result: ["", "", "", "", "", "", "", "", "", ""], 
+                    judgment: "OK" 
+                },
+                { 
+                    item: "尺寸检查", 
+                    standard: "关键尺寸符合图纸要求，公差±0.1mm", 
+                    method: "卡尺、千分尺等", 
+                    sample: "5", 
+                    result: ["", "", "", "", "", "", "", "", "", ""], 
+                    judgment: "OK" 
+                },
+                { 
+                    item: "环保检查", 
+                    standard: "符合RoHS/REACH要求，无有害物质，铅含量<1000ppm", 
+                    method: "XRF测试仪", 
+                    sample: "3", 
+                    result: ["", "", "", "", "", "", "", "", "", ""], 
+                    judgment: "OK" 
+                },
+                { 
+                    item: "可靠性测试", 
+                    standard: "高低温循环测试通过，温度范围-20℃~85℃，循环5次，无功能失效", 
+                    method: "环境试验箱", 
+                    sample: "2", 
+                    result: ["", "", "", "", "", "", "", "", "", ""], 
+                    judgment: "OK" 
+                },
+                { 
+                    item: "性能测试", 
+                    standard: "依据测试指导书要求，导通电阻<10mΩ，耐电压1500V/60秒无击穿", 
+                    method: "专用测试设备", 
+                    sample: "3", 
+                    result: ["", "", "", "", "", "", "", "", "", ""], 
+                    judgment: "OK" 
+                }
+            ];
+            
+            defaultItems.forEach((defaultItem, index) => {
+                addInspectionItemRow(index + 1, defaultItem);
+            });
+        }
+        
+        // 添加检验项目行
+        function addInspectionItemRow(seq, itemData = {}) {
+            const itemsContainer = document.getElementById('inspection-items');
+            const row = document.createElement('tr');
+            
+            // 初始化结果数组
+            const results = itemData.result || ["", "", "", "", "", "", "", "", "", ""];
+            
+            // 创建10个输入框
+            let resultInputsHTML = '<div class="result-inputs">';
+            for (let i = 0; i < 10; i++) {
+                resultInputsHTML += `<input type="text" class="result-input" value="${results[i] || ''}" placeholder="${i+1}" data-index="${i}">`;
+            }
+            resultInputsHTML += '</div>';
+            
+            row.innerHTML = `
+                <td>${seq}</td>
+                <td><input type="text" value="${itemData.item || ''}" class="table-input" placeholder="检验项目"></td>
+                <td><textarea class="table-input" placeholder="标准/规格要求" style="height: 80px; resize: vertical;">${itemData.standard || ''}</textarea></td>
+                <td><input type="text" value="${itemData.method || ''}" class="table-input" placeholder="检验方法"></td>
+                <td><input type="text" value="${itemData.sample || ''}" class="table-input" placeholder="抽样数"></td>
+                <td>${resultInputsHTML}</td>
+                <td>
+                    <select class="table-select">
+                        <option value="OK" ${itemData.judgment === 'OK' ? 'selected' : ''}>OK</option>
+                        <option value="NG" ${itemData.judgment === 'NG' ? 'selected' : ''}>NG</option>
+                        <option value="N/A" ${itemData.judgment === 'N/A' ? 'selected' : ''}>N/A</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="table-btn btn-remove item-remove" title="${currentLang === 'zh' ? '删除此项' : 'Xóa mục này'}">
+                        <i class="fas fa-trash"></i> ${currentLang === 'zh' ? '删除' : 'Xóa'}
+                    </button>
+                </td>
+            `;
+            
+            itemsContainer.appendChild(row);
+            
+            // 为删除按钮添加事件监听器
+            row.querySelector('.item-remove').addEventListener('click', function() {
+                if (itemsContainer.children.length > 1) {
+                    row.remove();
+                    updateItemSequence();
+                }
+            });
+        }
+        
+        // 添加检验项目
+        function addInspectionItem() {
+            const itemsContainer = document.getElementById('inspection-items');
+            const seq = itemsContainer.children.length + 1;
+            addInspectionItemRow(seq);
+        }
+        
+        // 更新检验项目序号
+        function updateItemSequence() {
+            const rows = document.querySelectorAll('#inspection-items tr');
+            rows.forEach((row, index) => {
+                row.cells[0].textContent = index + 1;
+            });
+        }
+        
+        // 生成报告编号
+        function generateReportNo() {
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+            
+            // 从本地存储获取当天的记录数
+            const todayRecords = inspectionRecords.filter(record => 
+                record.reportNo && record.reportNo.includes(dateStr)
+            );
+            
+            const seq = (todayRecords.length + 1).toString().padStart(3, '0');
+            document.getElementById('report-no').value = `IQC-${dateStr}-${seq}`;
+        }
+        
+        // 处理图片上传
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // 检查文件类型
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                showMessage(currentLang === 'zh' ? '只支持JPG、PNG、GIF格式的图片' : 'Chỉ hỗ trợ định dạng ảnh JPG, PNG, GIF', 'warning');
+                return;
+            }
+            
+            // 检查文件大小（5MB以内）
+            if (file.size > 5 * 1024 * 1024) {
+                showMessage(currentLang === 'zh' ? '图片大小不能超过5MB' : 'Kích thước ảnh không được vượt quá 5MB', 'warning');
+                return;
+            }
+            
+            // 读取图片文件
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // 保存图片数据
+                currentImageData = e.target.result;
+                
+                // 显示预览
+                const preview = document.getElementById('image-preview');
+                preview.src = currentImageData;
+                
+                // 显示预览区域
+                document.getElementById('image-preview-container').style.display = 'block';
+                
+                // 显示成功消息
+                showMessage(currentLang === 'zh' ? '图片上传成功' : 'Tải lên ảnh thành công', 'success');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        // 移除图片
+        function removeImage() {
+            currentImageData = null;
+            document.getElementById('image-preview').src = '';
+            document.getElementById('image-preview-container').style.display = 'none';
+            document.getElementById('image-upload').value = '';
+            showMessage(currentLang === 'zh' ? '图片已移除' : 'Ảnh đã được xóa', 'success');
+        }
+        
+        // 查看完整图片
+        function viewFullImage() {
+            if (currentImageData) {
+                document.getElementById('modal-image').src = currentImageData;
+                document.getElementById('image-modal').style.display = 'flex';
+            }
+        }
+        
+        // 关闭图片模态框
+        function closeImageModal() {
+            document.getElementById('image-modal').style.display = 'none';
+        }
+        
+        // 加载最近记录
+        function loadRecentRecords() {
+            const recentList = document.getElementById('recent-list');
+            recentList.innerHTML = '';
+            
+            if (inspectionRecords.length === 0) {
+                recentList.innerHTML = `
+                    <div class="empty-state" style="padding: 20px 10px;">
+                        <i class="fas fa-file-alt"></i>
+                        <p>${translations[currentLang]['no-recent']}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 显示最近5条记录
+            const recentRecords = inspectionRecords.slice(-5).reverse();
+            
+            recentRecords.forEach(record => {
+                const recordEl = document.createElement('div');
+                recordEl.className = 'recent-item';
+                
+                const statusClass = record.status === 'accepted' ? 'status-accepted' : 
+                                   record.status === 'rejected' ? 'status-rejected' : 'status-pending';
+                
+                const statusText = currentLang === 'zh' ? 
+                    (record.status === 'accepted' ? '已接受' : 
+                     record.status === 'rejected' ? '已拒收' : '待审核') :
+                    (record.status === 'accepted' ? 'Đã chấp nhận' : 
+                     record.status === 'rejected' ? 'Đã từ chối' : 'Chờ phê duyệt');
+                
+                const materialName = record.materialName ? 
+                    (record.materialName.length > 12 ? record.materialName.substring(0, 12) + '...' : record.materialName) : '';
+                
+                recordEl.innerHTML = `
+                    <div class="recent-id">${record.reportNo}</div>
+                    <div class="recent-details">
+                        <span>${materialName}</span>
+                        <span class="${statusClass}" style="font-size: 11px;">${statusText}</span>
+                    </div>
+                `;
+                
+                recordEl.addEventListener('click', () => loadRecordToForm(record.id));
+                recentList.appendChild(recordEl);
+            });
+        }
+        
+        // 加载历史记录
+        function loadHistoryRecords() {
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+            
+            if (inspectionRecords.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <p>${translations[currentLang]['no-history']}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 按日期倒序排列
+            const sortedRecords = [...inspectionRecords].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedRecords.forEach(record => {
+                const recordEl = document.createElement('div');
+                recordEl.className = 'history-item';
+                recordEl.dataset.id = record.id;
+                
+                const statusClass = record.status === 'accepted' ? 'status-accepted' : 
+                                   record.status === 'rejected' ? 'status-rejected' : 'status-pending';
+                
+                const statusText = currentLang === 'zh' ? 
+                    (record.status === 'accepted' ? '已接受' : 
+                     record.status === 'rejected' ? '已拒收' : '待审核') :
+                    (record.status === 'accepted' ? 'Đã chấp nhận' : 
+                     record.status === 'rejected' ? 'Đã từ chối' : 'Chờ phê duyệt');
+                
+                // 截断过长的文本
+                const materialName = record.materialName ? 
+                    (record.materialName.length > 30 ? record.materialName.substring(0, 30) + '...' : record.materialName) : '';
+                
+                // 检查是否有图片
+                const hasImage = record.materialLabelImage ? '<span style="color: #17a2b8; margin-left: 5px;"><i class="fas fa-image"></i></span>' : '';
+                
+                recordEl.innerHTML = `
+                    <div class="history-header">
+                        <div class="history-id">${record.reportNo} ${hasImage}</div>
+                        <div class="history-date">${record.date}</div>
+                    </div>
+                    <div><strong>${record.supplier || ''}</strong> - ${materialName}</div>
+                    <div class="history-details">
+                        <div><strong>${currentLang === 'zh' ? '物料编码' : 'Mã vật liệu'}:</strong> ${record.materialCode || ''}</div>
+                        <div><strong>${currentLang === 'zh' ? '客户' : 'Khách hàng'}:</strong> ${record.customer || ''}</div>
+                        <div><strong>${currentLang === 'zh' ? '检验员' : 'Nhân viên kiểm tra'}:</strong> ${record.inspector || ''}</div>
+                        <div><span class="history-status ${statusClass}">${statusText}</span></div>
+                    </div>
+                    <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-primary btn-view" style="padding: 6px 12px; font-size: 13px;">
+                            <i class="fas fa-eye"></i> ${currentLang === 'zh' ? '查看详情' : 'Xem chi tiết'}
+                        </button>
+                        <button class="btn btn-print btn-print-history" style="padding: 6px 12px; font-size: 13px; background-color: #17a2b8;">
+                            <i class="fas fa-print"></i> ${currentLang === 'zh' ? '打印报告' : 'In báo cáo'}
+                        </button>
+                        <button class="btn btn-secondary btn-delete" style="padding: 6px 12px; font-size: 13px;">
+                            <i class="fas fa-trash"></i> ${currentLang === 'zh' ? '删除记录' : 'Xóa bản ghi'}
+                        </button>
+                    </div>
+                `;
+                
+                historyList.appendChild(recordEl);
+                
+                // 为按钮添加事件监听器
+                recordEl.querySelector('.btn-view').addEventListener('click', () => loadRecordToForm(record.id));
+                recordEl.querySelector('.btn-print-history').addEventListener('click', () => printRecordById(record.id));
+                recordEl.querySelector('.btn-delete').addEventListener('click', () => deleteRecord(record.id));
+            });
+        }
+        
+        // 将记录加载到表单
+        function loadRecordToForm(recordId) {
+            const record = inspectionRecords.find(r => r.id === recordId);
+            if (!record) return;
+            
+            // 填充表单字段
+            document.getElementById('report-no').value = record.reportNo;
+            document.getElementById('inspection-date').value = record.date;
+            document.getElementById('supplier').value = record.supplier || '';
+            document.getElementById('customer').value = record.customer || '';
+            document.getElementById('material-code').value = record.materialCode || '';
+            document.getElementById('material-name').value = record.materialName || '';
+            document.getElementById('model').value = record.model || '';
+            document.getElementById('inspection-no').value = record.inspectionNo || '';
+            document.getElementById('order-quantity').value = record.orderQuantity || '';
+            document.getElementById('delivery-quantity').value = record.deliveryQuantity || '';
+            document.getElementById('received-quantity').value = record.receivedQuantity || '';
+            document.getElementById('delivery-date').value = record.deliveryDate || '';
+            document.getElementById('order-no').value = record.orderNo || '';
+            document.getElementById('arrival-date').value = record.arrivalDate || '';
+            document.getElementById('supplier-batch').value = record.supplierBatch || '';
+            document.getElementById('sample-size').value = record.sampleSize || '';
+            document.getElementById('disposition').value = record.disposition || '';
+            document.getElementById('inspector').value = record.inspector || '';
+            document.getElementById('supervisor').value = record.supervisor || '';
+            document.getElementById('qm-approval').value = record.qmApproval || '';
+            
+            // 设置检验结果
+            if (record.result) {
+                document.getElementById(`result-${record.result}`).checked = true;
+            }
+            
+            // 加载图片
+            if (record.materialLabelImage) {
+                currentImageData = record.materialLabelImage;
+                document.getElementById('image-preview').src = currentImageData;
+                document.getElementById('image-preview-container').style.display = 'block';
+            } else {
+                currentImageData = null;
+                document.getElementById('image-preview').src = '';
+                document.getElementById('image-preview-container').style.display = 'none';
+                document.getElementById('image-upload').value = '';
+            }
+            
+            // 填充检验项目
+            const itemsContainer = document.getElementById('inspection-items');
+            itemsContainer.innerHTML = '';
+            
+            if (record.items && record.items.length > 0) {
+                record.items.forEach((item, index) => {
+                    addInspectionItemRow(index + 1, item);
+                });
+            } else {
+                initInspectionItems();
+            }
+            
+            // 切换到新建记录表单
+            showSection('new-record-form');
+            
+            // 显示成功消息
+            showMessage(currentLang === 'zh' ? '记录已加载到表单中' : 'Bản ghi đã được tải vào biểu mẫu', 'success');
+        }
+        
+        // 保存记录
+        function saveRecord() {
+            // 收集表单数据
+            const formData = collectFormData();
+            
+            // 检查是否已有相同ID的记录
+            const existingIndex = inspectionRecords.findIndex(r => r.id === formData.id);
+            
+            if (existingIndex >= 0) {
+                // 更新现有记录
+                inspectionRecords[existingIndex] = formData;
+            } else {
+                // 添加新记录
+                inspectionRecords.push(formData);
+            }
+            
+            // 保存到本地存储
+            localStorage.setItem('iqcRecords', JSON.stringify(inspectionRecords));
+            
+            // 更新最近记录和历史记录
+            loadRecentRecords();
+            
+            // 显示成功消息
+            showMessage(currentLang === 'zh' ? '记录已保存' : 'Bản ghi đã được lưu', 'success');
+            
+            // 生成新的报告编号
+            generateReportNo();
+        }
+        
+        // 提交记录
+        function submitRecord() {
+            // 首先保存记录
+            saveRecord();
+            
+            // 显示提交成功消息
+            showMessage(currentLang === 'zh' ? '记录已提交审核' : 'Bản ghi đã được gửi để phê duyệt', 'success');
+            
+            // 重置表单
+            resetForm();
+        }
+        
+        // 收集表单数据
+        function collectFormData() {
+            // 收集检验项目
+            const items = [];
+            const itemRows = document.querySelectorAll('#inspection-items tr');
+            
+            itemRows.forEach(row => {
+                // 收集10个结果数据
+                const resultInputs = row.querySelectorAll('.result-input');
+                const results = Array.from(resultInputs).map(input => input.value);
+                
+                // 获取textarea的值
+                const standardTextarea = row.querySelector('td:nth-child(3) textarea');
+                const standardValue = standardTextarea ? standardTextarea.value : row.querySelector('td:nth-child(3) input').value;
+                
+                const item = {
+                    item: row.querySelector('td:nth-child(2) input').value,
+                    standard: standardValue,
+                    method: row.querySelector('td:nth-child(4) input').value,
+                    sample: row.querySelector('td:nth-child(5) input').value,
+                    result: results,
+                    judgment: row.querySelector('td:nth-child(7) select').value
+                };
+                items.push(item);
+            });
+            
+            // 确定检验结果
+            let result = 'accept';
+            if (document.getElementById('result-reject').checked) result = 'reject';
+            if (document.getElementById('result-concession').checked) result = 'concession';
+            if (document.getElementById('result-sorting').checked) result = 'sorting';
+            
+            // 确定状态
+            let status = 'pending';
+            if (result === 'accept') status = 'accepted';
+            if (result === 'reject') status = 'rejected';
+            
+            // 生成唯一ID（基于时间戳）
+            const id = new Date().getTime().toString();
+            
+            return {
+                id: id,
+                reportNo: document.getElementById('report-no').value,
+                date: document.getElementById('inspection-date').value,
+                supplier: document.getElementById('supplier').value,
+                customer: document.getElementById('customer').value,
+                materialCode: document.getElementById('material-code').value,
+                materialName: document.getElementById('material-name').value,
+                model: document.getElementById('model').value,
+                inspectionNo: document.getElementById('inspection-no').value,
+                orderQuantity: document.getElementById('order-quantity').value,
+                deliveryQuantity: document.getElementById('delivery-quantity').value,
+                receivedQuantity: document.getElementById('received-quantity').value,
+                deliveryDate: document.getElementById('delivery-date').value,
+                orderNo: document.getElementById('order-no').value,
+                arrivalDate: document.getElementById('arrival-date').value,
+                supplierBatch: document.getElementById('supplier-batch').value,
+                sampleSize: document.getElementById('sample-size').value,
+                disposition: document.getElementById('disposition').value,
+                inspector: document.getElementById('inspector').value,
+                supervisor: document.getElementById('supervisor').value,
+                qmApproval: document.getElementById('qm-approval').value,
+                materialLabelImage: currentImageData, // 保存图片数据
+                result: result,
+                status: status,
+                items: items
+            };
+        }
+        
+        // 删除记录
+        function deleteRecord(recordId) {
+            if (confirm(currentLang === 'zh' ? '确定要删除此记录吗？' : 'Bạn có chắc chắn muốn xóa bản ghi này?')) {
+                inspectionRecords = inspectionRecords.filter(record => record.id !== recordId);
+                localStorage.setItem('iqcRecords', JSON.stringify(inspectionRecords));
+                
+                // 重新加载历史记录
+                loadHistoryRecords();
+                loadRecentRecords();
+                
+                // 显示成功消息
+                showMessage(currentLang === 'zh' ? '记录已删除' : 'Bản ghi đã được xóa', 'success');
+            }
+        }
+        
+        // 重置表单
+        function resetForm() {
+            if (confirm(currentLang === 'zh' ? '确定要重置表单吗？所有未保存的更改将丢失。' : 'Bạn có chắc chắn muốn đặt lại biểu mẫu? Tất cả thay đổi chưa lưu sẽ bị mất.')) {
+                // 重置所有输入字段
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('inspection-date').value = today;
+                document.getElementById('supplier').value = '';
+                document.getElementById('customer').value = '';
+                document.getElementById('material-code').value = '';
+                document.getElementById('material-name').value = '';
+                document.getElementById('model').value = '';
+                document.getElementById('inspection-no').value = '';
+                document.getElementById('order-quantity').value = '';
+                document.getElementById('delivery-quantity').value = '';
+                document.getElementById('received-quantity').value = '';
+                document.getElementById('delivery-date').value = today;
+                document.getElementById('order-no').value = '';
+                document.getElementById('arrival-date').value = today;
+                document.getElementById('supplier-batch').value = '';
+                document.getElementById('sample-size').value = '';
+                document.getElementById('disposition').value = '';
+                document.getElementById('inspector').value = '';
+                document.getElementById('supervisor').value = '';
+                document.getElementById('qm-approval').value = '';
+                
+                // 重置图片
+                removeImage();
+                
+                // 重置检验结果选项
+                document.getElementById('result-accept').checked = true;
+                
+                // 重新初始化检验项目
+                initInspectionItems();
+                
+                // 生成新的报告编号
+                generateReportNo();
+                
+                // 显示成功消息
+                showMessage(currentLang === 'zh' ? '表单已重置' : 'Biểu mẫu đã được đặt lại', 'success');
+            }
+        }
+        
+        // 导出数据
+        function exportData() {
+            if (inspectionRecords.length === 0) {
+                showMessage(currentLang === 'zh' ? '没有可导出的记录' : 'Không có bản ghi nào để xuất', 'warning');
+                return;
+            }
+            
+            // 创建CSV内容
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            
+            // 添加标题行（根据当前语言）
+            if (currentLang === 'zh') {
+                csvContent += "报告编号,检验日期,供应商,客户,物料编码,物料名称,机型,送检单号,订单数,交货数,实收数,交货日期,检验结果,检验员,状态,是否有图片\n";
+            } else {
+                csvContent += "Số báo cáo,Ngày kiểm tra,Nhà cung cấp,Khách hàng,Mã vật liệu,Tên vật liệu,Model máy,Số phiếu gửi kiểm tra,Số lượng đặt hàng,Số lượng giao hàng,Số lượng thực nhận,Ngày giao hàng,Kết quả kiểm tra,Nhân viên kiểm tra,Trạng thái,Có hình ảnh\n";
+            }
+            
+            // 添加数据行
+            inspectionRecords.forEach(record => {
+                const statusText = currentLang === 'zh' ? 
+                    (record.status === 'accepted' ? '已接受' : 
+                     record.status === 'rejected' ? '已拒收' : '待审核') :
+                    (record.status === 'accepted' ? 'Đã chấp nhận' : 
+                     record.status === 'rejected' ? 'Đã từ chối' : 'Chờ phê duyệt');
+                
+                const hasImage = record.materialLabelImage ? (currentLang === 'zh' ? '是' : 'Có') : (currentLang === 'zh' ? '否' : 'Không');
+                
+                const row = [
+                    record.reportNo,
+                    record.date,
+                    record.supplier,
+                    record.customer,
+                    record.materialCode,
+                    record.materialName,
+                    record.model,
+                    record.inspectionNo,
+                    record.orderQuantity,
+                    record.deliveryQuantity,
+                    record.receivedQuantity,
+                    record.deliveryDate,
+                    record.result,
+                    record.inspector,
+                    statusText,
+                    hasImage
+                ].map(field => `"${field || ''}"`).join(',');
+                
+                csvContent += row + "\n";
+            });
+            
+            // 创建下载链接
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `iqc_records_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            
+            // 触发下载
+            link.click();
+            document.body.removeChild(link);
+            
+            // 显示成功消息
+            showMessage(currentLang === 'zh' ? '数据已导出为CSV文件' : 'Dữ liệu đã được xuất dưới dạng tệp CSV', 'success');
+        }
+        
+        // 显示使用指南
+        function showGuide() {
+            const guideContent = currentLang === 'zh' ? 
+                `IQC检验记录系统增强版使用指南：
+                
+                1. 填写基本信息：输入供应商、客户、物料信息等新增字段
+                2. 上传物料标签：点击上传区域上传物料标签图片
+                3. 添加检验项目：根据实际检验需求添加项目，已包含环保检查和可靠性测试
+                4. 填写检验结果：每个检验项目可记录10组数据，分别填写在10个输入框中
+                5. 选择处置意见：根据检验结果选择合适的处置方式
+                6. 填写批准信息：检验员、主管和质量经理签名
+                7. 保存或提交记录：保存到系统或提交审核
+                8. 打印报告：可生成详细的检验报告并打印，包含物料标签图片
+                
+                系统符合ISO 9001标准要求，确保检验记录的可追溯性和完整性。
+                
+                新增功能：
+                - 供应商名称改为手动输入
+                - 增加客户、机型、送检单号等字段
+                - 增加订单数、交货数、实收数、交货日期
+                - 检验结果支持10组数据分开记录
+                - 增加环保检查项目
+                - 增加可靠性测试项目
+                - 增加物料标签图片上传和展示功能
+                - 增加详细打印报告功能，包含图片` :
+                `Hướng dẫn sử dụng hệ thống ghi chép kiểm tra IQC phiên bản nâng cao:
+                
+                1. Điền thông tin cơ bản: Nhập thông tin nhà cung cấp, khách hàng, vật liệu và các trường mới
+                2. Tải lên nhãn vật liệu: Nhấp vào khu vực tải lên để tải lên hình ảnh nhãn vật liệu
+                3. Thêm hạng mục kiểm tra: Thêm các hạng mục theo yêu cầu kiểm tra thực tế, đã bao gồm kiểm tra môi trường và kiểm tra độ tin cậy
+                4. Điền kết quả kiểm tra: Mỗi hạng mục kiểm tra có thể ghi lại 10 nhóm dữ liệu, điền vào 10 ô nhập liệu riêng biệt
+                5. Chọn ý kiến xử lý: Chọn phương pháp xử lý phù hợp dựa trên kết quả kiểm tra
+                6. Điền thông tin phê duyệt: Chữ ký của nhân viên kiểm tra, giám sát và quản lý chất lượng
+                7. Lưu hoặc gửi bản ghi: Lưu vào hệ thống hoặc gửi để phê duyệt
+                8. In báo cáo: Có thể tạo báo cáo kiểm tra chi tiết và in, bao gồm cả hình ảnh nhãn vật liệu
+                
+                Hệ thống tuân thủ các yêu cầu tiêu chuẩn ISO 9001, đảm bảo khả năng truy xuất và tính toàn vẹn của hồ sơ kiểm tra.
+                
+                Tính năng mới:
+                - Tên nhà cung cấp được nhập thủ công
+                - Thêm các trường: khách hàng, model máy, số phiếu gửi kiểm tra
+                - Thêm số lượng đặt hàng, số lượng giao hàng, số lượng thực nhận, ngày giao hàng
+                - Kết quả kiểm tra hỗ trợ ghi chép 10 nhóm dữ liệu riêng biệt
+                - Thêm hạng mục kiểm tra môi trường
+                - Thêm hạng mục kiểm tra độ tin cậy
+                - Thêm chức năng tải lên và hiển thị hình ảnh nhãn vật liệu
+                - Thêm chức năng in báo cáo chi tiết, bao gồm hình ảnh`;
+            
+            alert(guideContent);
+        }
+        
+        // 显示消息
+        function showMessage(message, type) {
+            // 创建消息元素
+            const messageEl = document.createElement('div');
+            messageEl.style.position = 'fixed';
+            messageEl.style.top = '15px';
+            messageEl.style.right = '15px';
+            messageEl.style.padding = '12px 16px';
+            messageEl.style.borderRadius = '5px';
+            messageEl.style.boxShadow = '0 3px 10px rgba(0, 0, 0, 0.15)';
+            messageEl.style.zIndex = '1000';
+            messageEl.style.fontWeight = '500';
+            messageEl.style.transition = 'opacity 0.3s';
+            messageEl.style.fontSize = '13px';
+            messageEl.style.maxWidth = '300px';
+            
+            if (type === 'success') {
+                messageEl.style.backgroundColor = '#d4edda';
+                messageEl.style.color = '#155724';
+                messageEl.style.border = '1px solid #c3e6cb';
+            } else if (type === 'warning') {
+                messageEl.style.backgroundColor = '#fff3cd';
+                messageEl.style.color = '#856404';
+                messageEl.style.border = '1px solid #ffeaa7';
+            } else {
+                messageEl.style.backgroundColor = '#f8d7da';
+                messageEl.style.color = '#721c24';
+                messageEl.style.border = '1px solid #f5c6cb';
+            }
+            
+            messageEl.textContent = message;
+            
+            // 添加到页面
+            document.body.appendChild(messageEl);
+            
+            // 3秒后淡出并移除
+            setTimeout(() => {
+                messageEl.style.opacity = '0';
+                setTimeout(() => {
+                    if (messageEl.parentNode) {
+                        document.body.removeChild(messageEl);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // 打印当前记录
+        function printCurrentRecord() {
+            // 收集当前表单数据
+            const formData = collectFormData();
+            generatePrintReport(formData);
+        }
+        
+        // 根据ID打印记录
+        function printRecordById(recordId) {
+            const record = inspectionRecords.find(r => r.id === recordId);
+            if (record) {
+                generatePrintReport(record);
+            } else {
+                showMessage(currentLang === 'zh' ? '未找到记录' : 'Không tìm thấy bản ghi', 'warning');
+            }
+        }
+        
+        // 生成打印报告
+        function generatePrintReport(recordData) {
+            // 确定最终判定文本
+            let finalJudgmentText = '';
+            if (recordData.result === 'accept') {
+                finalJudgmentText = currentLang === 'zh' ? '接受' : 'Chấp nhận';
+            } else if (recordData.result === 'reject') {
+                finalJudgmentText = currentLang === 'zh' ? '拒收' : 'Từ chối';
+            } else if (recordData.result === 'concession') {
+                finalJudgmentText = currentLang === 'zh' ? '特采/让步接收' : 'Nhượng bộ';
+            } else if (recordData.result === 'sorting') {
+                finalJudgmentText = currentLang === 'zh' ? '挑选使用' : 'Phân loại sử dụng';
+            }
+            
+            // 构建检验项目表格行
+            let inspectionItemsRows = '';
+            if (recordData.items && recordData.items.length > 0) {
+                recordData.items.forEach((item, index) => {
+                    // 构建10组数据
+                    let resultsHTML = '<div class="print-results-grid">';
+                    for (let i = 0; i < 10; i++) {
+                        resultsHTML += `<div class="print-result-item">${item.result[i] || ''}</div>`;
+                    }
+                    resultsHTML += '</div>';
+                    
+                    inspectionItemsRows += `
+                        <tr>
+                            <td style="text-align: center;">${index + 1}</td>
+                            <td>${item.item || ''}</td>
+                            <td>${item.standard || ''}</td>
+                            <td>${item.method || ''}</td>
+                            <td style="text-align: center;">${item.sample || ''}</td>
+                            <td>${resultsHTML}</td>
+                            <td style="text-align: center;">${item.judgment || ''}</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            // 构建图片HTML
+            let imageHTML = '';
+            if (recordData.materialLabelImage) {
+                imageHTML = `
+                    <div class="print-image-container">
+                        <div class="print-image-label">${translations[currentLang]['print-material-label']}</div>
+                        <img src="${recordData.materialLabelImage}" class="print-image" alt="${translations[currentLang]['print-material-label']}">
+                    </div>
+                `;
+            }
+            
+            // 构建打印报告HTML
+            const printHTML = `
+                <div class="print-report">
+                    <div class="print-header">
+                        <div class="print-title">${translations[currentLang]['print-title']}</div>
+                        <div class="print-subtitle">${translations[currentLang]['print-iso']}</div>
+                        <div>${recordData.reportNo || ''} | ${currentLang === 'zh' ? '检验日期' : 'Ngày kiểm tra'}: ${recordData.date || ''}</div>
+                    </div>
+                    
+                    ${imageHTML}
+                    
+                    <div class="print-section">
+                        <div class="print-section-title">${translations[currentLang]['print-basic-info']}</div>
+                        <div class="print-info-grid">
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '供应商' : 'Nhà cung cấp'}:</span>
+                                <span>${recordData.supplier || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '客户' : 'Khách hàng'}:</span>
+                                <span>${recordData.customer || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '物料编码' : 'Mã vật liệu'}:</span>
+                                <span>${recordData.materialCode || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '物料名称' : 'Tên vật liệu'}:</span>
+                                <span>${recordData.materialName || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '机型' : 'Model máy'}:</span>
+                                <span>${recordData.model || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '送检单号' : 'Số phiếu gửi kiểm tra'}:</span>
+                                <span>${recordData.inspectionNo || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '订单数' : 'Số lượng đặt hàng'}:</span>
+                                <span>${recordData.orderQuantity || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '交货数' : 'Số lượng giao hàng'}:</span>
+                                <span>${recordData.deliveryQuantity || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '实收数' : 'Số lượng thực nhận'}:</span>
+                                <span>${recordData.receivedQuantity || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '交货日期' : 'Ngày giao hàng'}:</span>
+                                <span>${recordData.deliveryDate || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '公司订单号' : 'Số đơn đặt hàng'}:</span>
+                                <span>${recordData.orderNo || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '来料日期' : 'Ngày nguyên liệu đến'}:</span>
+                                <span>${recordData.arrivalDate || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '供应商批号' : 'Số lô nhà cung cấp'}:</span>
+                                <span>${recordData.supplierBatch || ''}</span>
+                            </div>
+                            <div class="print-info-item">
+                                <span class="print-info-label">${currentLang === 'zh' ? '抽样数量' : 'Số lượng mẫu'}:</span>
+                                <span>${recordData.sampleSize || ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="print-section">
+                        <div class="print-section-title">${translations[currentLang]['print-inspection-items']}</div>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">${currentLang === 'zh' ? '序号' : 'STT'}</th>
+                                    <th style="width: 12%;">${currentLang === 'zh' ? '检验项目' : 'Hạng mục kiểm tra'}</th>
+                                    <th style="width: 20%;">${currentLang === 'zh' ? '检验标准/规格要求' : 'Tiêu chuẩn/Yêu cầu kỹ thuật'}</th>
+                                    <th style="width: 12%;">${currentLang === 'zh' ? '检验方法' : 'Phương pháp kiểm tra'}</th>
+                                    <th style="width: 8%;">${currentLang === 'zh' ? '抽样数' : 'Số lượng mẫu'}</th>
+                                    <th style="width: 30%;">${currentLang === 'zh' ? '检验结果记录 (10组数据)' : 'Ghi chép kết quả kiểm tra (10 nhóm dữ liệu)'}</th>
+                                    <th style="width: 13%;">${currentLang === 'zh' ? '单项判定' : 'Đánh giá từng mục'}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${inspectionItemsRows}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="print-section">
+                        <div class="print-section-title">${translations[currentLang]['print-result-disposition']}</div>
+                        <div class="print-info-item">
+                            <span class="print-info-label">${translations[currentLang]['print-final-judgment']}:</span>
+                            <span><strong>${finalJudgmentText}</strong></span>
+                        </div>
+                        <div class="print-info-item">
+                            <span class="print-info-label">${translations[currentLang]['print-disposition']}:</span>
+                            <span>${recordData.disposition || ''}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="print-section">
+                        <div class="print-section-title">${translations[currentLang]['print-approval-traceability']}</div>
+                        <div class="print-signatures">
+                            <div class="print-signature">
+                                <div>${translations[currentLang]['print-inspector']}:</div>
+                                <div>${recordData.inspector || ''}</div>
+                                <div class="print-signature-line">${translations[currentLang]['print-signature']}</div>
+                                <div>${translations[currentLang]['print-date']}: ${recordData.date || ''}</div>
+                            </div>
+                            <div class="print-signature">
+                                <div>${translations[currentLang]['print-supervisor']}:</div>
+                                <div>${recordData.supervisor || ''}</div>
+                                <div class="print-signature-line">${translations[currentLang]['print-signature']}</div>
+                                <div>${translations[currentLang]['print-date']}: ${recordData.date || ''}</div>
+                            </div>
+                            <div class="print-signature">
+                                <div>${translations[currentLang]['print-qm-manager']}:</div>
+                                <div>${recordData.qmApproval || ''}</div>
+                                <div class="print-signature-line">${translations[currentLang]['print-signature']}</div>
+                                <div>${translations[currentLang]['print-date']}: ${recordData.date || ''}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #666;">
+                        ${currentLang === 'zh' ? '本报告由IQC检验记录系统生成' : 'Báo cáo này được tạo bởi hệ thống ghi chép kiểm tra IQC'}
+                    </div>
+                </div>
+            `;
+            
+            // 将打印内容添加到页面
+            const printContainer = document.getElementById('print-container');
+            printContainer.innerHTML = printHTML;
+            
+            // 显示打印内容并打印
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${recordData.reportNo || 'IQC检验报告'}</title>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                            font-family: 'SimSun', '宋体', serif;
+                        }
+                        
+                        body {
+                            padding: 20px;
+                            color: #000;
+                            font-size: 12px;
+                            line-height: 1.4;
+                        }
+                        
+                        .print-report {
+                            max-width: 1200px;
+                            margin: 0 auto;
+                        }
+                        
+                        .print-header {
+                            text-align: center;
+                            margin-bottom: 20px;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 15px;
+                        }
+                        
+                        .print-title {
+                            font-size: 24px;
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                        }
+                        
+                        .print-subtitle {
+                            font-size: 16px;
+                            margin-bottom: 5px;
+                        }
+                        
+                        .print-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 15px 0;
+                            font-size: 12px;
+                            table-layout: fixed;
+                        }
+                        
+                        .print-table th, .print-table td {
+                            border: 1px solid #000;
+                            padding: 8px 10px;
+                            vertical-align: top;
+                            word-wrap: break-word;
+                            overflow-wrap: break-word;
+                        }
+                        
+                        .print-table th {
+                            background-color: #f2f2f2;
+                            font-weight: bold;
+                            text-align: center;
+                        }
+                        
+                        .print-results-grid {
+                            display: grid;
+                            grid-template-columns: repeat(5, 1fr);
+                            gap: 3px;
+                        }
+                        
+                        .print-result-item {
+                            border: 1px solid #ddd;
+                            padding: 3px;
+                            text-align: center;
+                            font-size: 11px;
+                            min-height: 25px;
+                        }
+                        
+                        .print-section {
+                            margin-bottom: 20px;
+                            page-break-inside: avoid;
+                        }
+                        
+                        .print-section-title {
+                            font-size: 16px;
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                            border-bottom: 1px solid #000;
+                            padding-bottom: 5px;
+                        }
+                        
+                        .print-info-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                            gap: 10px;
+                            margin-bottom: 15px;
+                        }
+                        
+                        .print-info-item {
+                            margin-bottom: 5px;
+                        }
+                        
+                        .print-info-label {
+                            font-weight: bold;
+                            display: inline-block;
+                            width: 120px;
+                        }
+                        
+                        .print-signatures {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 30px;
+                            margin-top: 40px;
+                            padding-top: 20px;
+                            border-top: 1px solid #000;
+                        }
+                        
+                        .print-signature {
+                            text-align: center;
+                        }
+                        
+                        .print-signature-line {
+                            border-top: 1px solid #000;
+                            margin-top: 40px;
+                            padding-top: 5px;
+                        }
+                        
+                        .print-image-container {
+                            text-align: center;
+                            margin: 15px 0;
+                            page-break-inside: avoid;
+                        }
+                        
+                        .print-image-label {
+                            font-weight: bold;
+                            margin-bottom: 5px;
+                            font-size: 14px;
+                        }
+                        
+                        .print-image {
+                            max-width: 400px;
+                            max-height: 300px;
+                            border: 1px solid #ddd;
+                            padding: 5px;
+                            margin: 0 auto;
+                        }
+                        
+                        @media print {
+                            body {
+                                padding: 0;
+                            }
+                            
+                            .print-section {
+                                page-break-inside: avoid;
+                            }
+                            
+                            .print-table {
+                                page-break-inside: avoid;
+                            }
+                            
+                            .print-image-container {
+                                page-break-inside: avoid;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${printHTML}
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() {
+                                window.close();
+                            }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+        }
+    </script>
+</body>
+</html>
